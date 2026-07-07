@@ -29,8 +29,14 @@ rm -rf "$STAGE"
 codesign --force --timestamp -s "$IDENTITY" "dist/BlogWriter-$VERSION-macos-arm64.dmg"
 ditto -c -k --keepParent "$APP" "dist/BlogWriter-$VERSION-macos-arm64.zip"
 
+echo "==> Notarizing (profile: ${NOTARY_PROFILE:-AC_PASSWORD})"
+xcrun notarytool submit "dist/BlogWriter-$VERSION-macos-arm64.dmg" \
+  --keychain-profile "${NOTARY_PROFILE:-AC_PASSWORD}" --wait
+xcrun stapler staple "dist/BlogWriter-$VERSION-macos-arm64.dmg"
+xcrun stapler staple "$APP"
+# Re-zip so the zipped .app carries the stapled ticket too.
+ditto -c -k --keepParent "$APP" "dist/BlogWriter-$VERSION-macos-arm64.zip"
+spctl --assess --type open --context context:primary-signature -v "dist/BlogWriter-$VERSION-macos-arm64.dmg"
+
 echo "==> Done:"
 ls -lh "dist/BlogWriter-$VERSION-macos-arm64".{dmg,zip}
-echo "NOTE: For Gatekeeper-clean installs, notarize the DMG:"
-echo "  xcrun notarytool submit dist/BlogWriter-$VERSION-macos-arm64.dmg --keychain-profile <profile> --wait"
-echo "  xcrun stapler staple dist/BlogWriter-$VERSION-macos-arm64.dmg"
