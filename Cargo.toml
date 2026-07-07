@@ -1,0 +1,25 @@
+# Standalone workspace so the project builds anywhere.
+[workspace]
+
+[package]
+name = "blogwriter"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "blogwriter"
+path = "src/main.rs"
+
+[dependencies]
+elyra = { path = "/Users/kh/Code/elyra-framework/framework", features = ["database", "tray"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+specta = { version = "=2.0.0-rc.25", features = ["derive"] }
+rust-embed = "8"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "sync"] }
+reqwest = { version = "0.12", features = ["json"] }
+image = "0.25"
+base64 = "0.22"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
