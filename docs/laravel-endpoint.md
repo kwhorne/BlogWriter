@@ -8,20 +8,22 @@ accepts this payload and stores it.
 
 ```json
 {
-  "title":    "10 Laravel Tips",
-  "slug":     "10-laravel-tips",
-  "excerpt":  "A short summary.",
-  "body":     "# 10 Laravel Tips\n\n...markdown...",
-  "theme":    "Laravel tips",
-  "category": "Laravel tips",
-  "image":    "data:image/jpeg;base64,/9j/4AAQ...",
-  "status":   "published"
+  "title":         "10 Laravel Tips",
+  "slug":          "10-laravel-tips",
+  "excerpt":       "A short summary.",
+  "body":          "<h1>10 Laravel Tips</h1><p>...html...</p>",
+  "body_markdown": "# 10 Laravel Tips\n\n...markdown source...",
+  "theme":         "Laravel tips",
+  "category":      "Laravel tips",
+  "image":         "data:image/jpeg;base64,/9j/4AAQ...",
+  "status":        "published"
 }
 ```
 
 | Field | Notes |
 |---|---|
-| `title` / `slug` / `body` | Always present; `body` is Markdown |
+| `title` / `slug` / `body` | Always present; `body` is **ready-to-render HTML** (rendered from Markdown at publish time), safe to feed straight into a rich-text editor like Flux |
+| `body_markdown` | The Markdown source the HTML was rendered from — store it if you want to re-render yourself, otherwise ignore |
 | `excerpt` | 1–2 sentence summary, may be empty |
 | `theme` | The topic the article was generated for |
 | `category` | Blog category to file under; falls back to the theme if unset |
@@ -98,8 +100,10 @@ Route::post('/articles', function (Request $req) {
 'blogwriter' => ['token' => env('BLOGWRITER_TOKEN')],
 ```
 
-Set the same token in BlogWriter's site form ("Bearer token"). Render `body`
-(Markdown) with your preferred parser (e.g. `league/commonmark`).
+Set the same token in BlogWriter's site form ("Bearer token"). `body` is
+ready-to-render HTML — output it with `{!! $post->body !!}` (or store
+`body_markdown` and render with your own parser if you prefer Markdown as the
+source of truth).
 
 ## Tips
 

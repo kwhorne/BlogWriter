@@ -18,6 +18,7 @@ specta = { version = "=2.0.0-rc.25", features = ["derive"] }
 rust-embed = "8"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "sync"] }
 reqwest = { version = "0.12", features = ["json"] }
+pulldown-cmark = { version = "0.12", default-features = false, features = ["html"] }
 image = "0.25"
 base64 = "0.22"
 
