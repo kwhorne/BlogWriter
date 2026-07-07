@@ -59,7 +59,8 @@ pub async fn generate(db: &Database, site: &Site, theme: &str) -> Result<Generat
          Theme / topic: \"{theme}\".\n\
          Tone: {tone}.\n\
          Return ONLY minified JSON (no markdown fences, no commentary) with exactly these keys:\n\
-         \"title\" (string), \"excerpt\" (1-2 sentence summary), \"body\" (the full article in Markdown, ~600-900 words).",
+         \"title\" (string), \"excerpt\" (1-2 sentence summary), \"body\" (the full article in Markdown, ~600-900 words).\n\
+         Inside JSON strings use only valid JSON escapes; never backslash-escape Markdown characters like * _ ( ) [ ] or #.",
         language = site.language,
         context = context,
         tone = site.tone,
@@ -115,13 +116,50 @@ pub async fn generate(db: &Database, site: &Site, theme: &str) -> Result<Generat
 }
 
 /// Parse the model's reply into a [`Generated`], tolerating stray prose or code
-/// fences by extracting the outermost JSON object.
+/// fences by extracting the outermost JSON object. If parsing fails on an
+/// invalid escape (models sometimes Markdown-escape characters like `\*`
+/// inside JSON strings), retry with those escapes repaired.
 fn parse_generated(raw: &str) -> Result<Generated, String> {
     let slice = match (raw.find('{'), raw.rfind('}')) {
         (Some(start), Some(end)) if end > start => &raw[start..=end],
         _ => raw,
     };
-    serde_json::from_str::<Generated>(slice).map_err(|e| format!("model did not return valid JSON: {e}"))
+    match serde_json::from_str::<Generated>(slice) {
+        Ok(g) => Ok(g),
+        Err(first_err) => serde_json::from_str::<Generated>(&repair_invalid_escapes(slice))
+            .map_err(|_| format!("model did not return valid JSON: {first_err}")),
+    }
+}
+
+/// Repair JSON-invalid escape sequences by turning the backslash into a
+/// literal one (`\*` → `\\*`). Valid escapes (`\"`, `\\`, `\/`, `\b`, `\f`,
+/// `\n`, `\r`, `\t`, and `\uXXXX` with four hex digits) pass through intact.
+fn repair_invalid_escapes(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 8);
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c != '\\' {
+            out.push(c);
+            continue;
+        }
+        match chars.peek().copied() {
+            Some(n) if matches!(n, '"' | '\\' | '/' | 'b' | 'f' | 'n' | 'r' | 't') => {
+                out.push('\\');
+                out.push(n);
+                chars.next();
+            }
+            Some('u') => {
+                let hex: String = chars.clone().skip(1).take(4).collect();
+                if hex.len() == 4 && hex.chars().all(|h| h.is_ascii_hexdigit()) {
+                    out.push('\\'); // valid \uXXXX — leave as-is
+                } else {
+                    out.push_str("\\\\"); // malformed unicode escape
+                }
+            }
+            _ => out.push_str("\\\\"), // lone/invalid escape → literal backslash
+        }
+    }
+    out
 }
 
 #[cfg(test)]
@@ -141,5 +179,28 @@ mod tests {
         let raw = "Sure! Here you go: {\"title\":\"T\",\"excerpt\":\"\",\"body\":\"B\"} hope that helps";
         let g = parse_generated(raw).unwrap();
         assert_eq!(g.title, "T");
+    }
+
+    #[test]
+    fn repairs_markdown_escapes() {
+        // `\*` and `\-` are valid Markdown escaping but invalid JSON escapes.
+        let raw = r#"{"title":"T","excerpt":"e","body":"a \* b \- c"}"#;
+        let g = parse_generated(raw).unwrap();
+        assert_eq!(g.body, r"a \* b \- c");
+    }
+
+    #[test]
+    fn keeps_valid_escapes_intact() {
+        let raw = r#"{"title":"T \u00e9","excerpt":"","body":"line\nnext \\ \"q\""}"#;
+        let g = parse_generated(raw).unwrap();
+        assert_eq!(g.title, "T \u{e9}");
+        assert_eq!(g.body, "line\nnext \\ \"q\"");
+    }
+
+    #[test]
+    fn repairs_malformed_unicode_escape() {
+        let raw = r#"{"title":"T","excerpt":"","body":"bad \uZZ99 escape"}"#;
+        let g = parse_generated(raw).unwrap();
+        assert_eq!(g.body, r"bad \uZZ99 escape");
     }
 }
