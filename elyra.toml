@@ -10,7 +10,7 @@ out = "app/src/bindings.ts"
 [bundle]
 identifier = "no.gets.blogwriter"
 name = "BlogWriter"
-version = "1.0.0"
+version = "1.0.1"
 
 [database]
 url = "sqlite://blogwriter.db?mode=rwc"
