@@ -36,6 +36,10 @@ framework (Rust backend + Svelte frontend).
 - **Publishing** POSTs the article to the site's Laravel endpoint — see
   [docs/laravel-endpoint.md](docs/laravel-endpoint.md) for the contract and a
   copy-paste route/controller.
+
+📚 **Full documentation lives in [docs/](docs/README.md)** — getting started,
+configuration, scheduling, image generation, architecture, database schema,
+and troubleshooting.
 - **Scheduling** is a background task; each site advances its own `next_run_at`
   by its cadence. Set cadence to `manual` to only generate on demand.
 
@@ -82,6 +86,19 @@ Your site only needs a single authenticated endpoint that accepts the article
 payload. A minimal, ready-to-paste route + controller (including image
 handling) is documented in [docs/laravel-endpoint.md](docs/laravel-endpoint.md).
 
+## Documentation
+
+| Guide | Description |
+|---|---|
+| [Getting started](docs/getting-started.md) | Build, run, and generate your first article |
+| [Configuration](docs/configuration.md) | Settings, env vars, and every site option |
+| [Scheduling](docs/scheduling.md) | Cadences, the scheduler, and theme rotation |
+| [Image generation](docs/images.md) | Cover images: models, styles, optimization |
+| [Laravel endpoint](docs/laravel-endpoint.md) | The publish contract for your site |
+| [Architecture](docs/architecture.md) | Modules, data flow, and events |
+| [Database](docs/database.md) | SQLite schema and migrations |
+| [Troubleshooting](docs/troubleshooting.md) | Common errors and fixes |
+
 ## Project layout
 
 ```
@@ -94,7 +111,7 @@ src/            Rust backend (Elyra app)
   models.rs     SQLite models
 app/            Svelte 5 frontend (Vite)
 migrations/     SQLite migrations
-docs/           Laravel endpoint contract
+docs/           Documentation (see docs/README.md)
 ```
 
 ## Testing
