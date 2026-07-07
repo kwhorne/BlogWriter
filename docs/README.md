@@ -13,6 +13,7 @@ registered Laravel sites on a schedule.
 | [Scheduling](scheduling.md) | Cadences, the background scheduler, and theme rotation |
 | [Image generation](images.md) | Cover images: providers, styles, aspect ratios, and optimization |
 | [Laravel endpoint](laravel-endpoint.md) | The publish contract + a copy-paste route/controller for your site |
+| [Auto-update](auto-update.md) | Signed in-app updates from GitHub Releases |
 | [Architecture](architecture.md) | How the pieces fit together: modules, data flow, events |
 | [Database](database.md) | SQLite schema, migrations, and where your data lives |
 | [Troubleshooting](troubleshooting.md) | Common errors and how to fix them |

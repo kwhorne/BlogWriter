@@ -67,7 +67,18 @@ export type Site = {
 	updated_at: number,
 };
 
+export type UpdateCheck = {
+	available: boolean,
+	/**  Latest version when available, otherwise the running version. */
+	version: string,
+	notes: string,
+	current: string,
+};
+
 export const api = {
+  check_for_update(): Promise<UpdateCheck> {
+    return invoke("check_for_update");
+  },
   delete_article(article_id: number): Promise<null> {
     return invoke("delete_article", article_id);
   },
@@ -112,6 +123,9 @@ export const api = {
 	updated_at: number,
 } | null> {
     return invoke("get_site", id);
+  },
+  install_update(): Promise<null> {
+    return invoke("install_update");
   },
   list_articles(site_id: number): Promise<Article[]> {
     return invoke("list_articles", site_id);

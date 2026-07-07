@@ -7,6 +7,7 @@ mod image;
 mod models;
 mod publish;
 mod schedule;
+mod updater;
 
 #[cfg(test)]
 mod db_tests;
@@ -66,6 +67,8 @@ fn main() -> elyra::Result<()> {
             handlers::delete_article,
             handlers::get_settings,
             handlers::save_settings,
+            updater::check_for_update,
+            updater::install_update,
         ])
         .assets(elyra::asset_resolver::<Assets>())
         .run()

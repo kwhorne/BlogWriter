@@ -133,11 +133,13 @@ how to file issues and submit pull requests.
 ## Building releases
 
 ```bash
-scripts/build-macos.sh   # bundle + Developer ID-signed .app, .dmg, .zip (arm64)
-scripts/build-linux.sh   # Docker build → tar.gz (host arch)
+scripts/build-macos.sh            # bundle + Developer ID-signed & notarized .app, .dmg, .zip (arm64)
+scripts/build-linux.sh            # Docker build → tar.gz (host arch)
+scripts/make-update-manifest.sh   # sign artifacts → dist/latest.json for the auto-updater
 ```
 
-Artifacts land in `dist/`. See the scripts for signing/notarization details.
+Artifacts land in `dist/`. Attach `latest.json` to the GitHub release so
+installed apps can [auto-update](docs/auto-update.md).
 
 ## License
 

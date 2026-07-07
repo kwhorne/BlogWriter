@@ -3,15 +3,21 @@
 
 [package]
 name = "blogwriter"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
+default-run = "blogwriter"
 
 [[bin]]
 name = "blogwriter"
 path = "src/main.rs"
 
+# Release tool: generate the update-signing keypair and sign artifacts.
+[[bin]]
+name = "blogwriter-sign"
+path = "src/bin/sign.rs"
+
 [dependencies]
-elyra = { git = "ssh://git@github.com/kwhorne/elyra-framework.git", features = ["database", "tray"] }
+elyra = { git = "ssh://git@github.com/kwhorne/elyra-framework.git", features = ["database", "tray", "updater"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 specta = { version = "=2.0.0-rc.25", features = ["derive"] }
@@ -19,6 +25,8 @@ rust-embed = "8"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "sync"] }
 reqwest = { version = "0.12", features = ["json"] }
 pulldown-cmark = { version = "0.12", default-features = false, features = ["html"] }
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+rand = "0.8"
 image = "0.25"
 base64 = "0.22"
 
