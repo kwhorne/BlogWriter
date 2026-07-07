@@ -8,14 +8,15 @@ This guide takes you from a fresh clone to your first generated article.
 |---|---|
 | [Rust](https://rustup.rs) | Stable toolchain, edition 2021 |
 | [Node.js](https://nodejs.org) 20+ | For building the Svelte frontend |
-| [Elyra framework](https://github.com/elyra) | Currently referenced by **local path** — see below |
+| [Elyra framework](https://github.com/kwhorne/elyra-framework) | Git dependency fetched over **SSH** — see below |
 | Anthropic API key | Required for article generation |
 | OpenAI API key | Optional — only needed for cover images |
 
-> **Path dependencies:** `Cargo.toml` references the `elyra` crate and
-> `app/package.json` references `@elyra/runtime` by local filesystem path.
-> Check out the Elyra framework locally and adjust both paths to match your
-> machine before building.
+> **Dependencies:** the `elyra` crate is a git dependency over SSH
+> (`.cargo/config.toml` enables `git-fetch-with-cli` so your SSH agent is
+> used); you need read access to the repository. The frontend's
+> `@elyra/runtime` is still a local `file:` path in `app/package.json` —
+> check out the framework and adjust that path to your machine.
 
 ## Build and run
 

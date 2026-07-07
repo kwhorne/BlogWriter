@@ -107,11 +107,13 @@ After changing any `#[command]` signature, regenerate:
 rata codegen && cd app && npm run build
 ```
 
-### Cargo can't find the `elyra` crate
+### Cargo can't fetch the `elyra` crate
 
-The `elyra` dependency is a **local path** in `Cargo.toml` (and
-`@elyra/runtime` in `app/package.json`). Check out the Elyra framework and
-point both paths at your local copy.
+The `elyra` dependency is a **git dependency over SSH**. Make sure your SSH
+key has read access to the framework repository and that your agent is
+running (`ssh -T git@github.com`). The frontend's `@elyra/runtime` is a
+local `file:` path in `app/package.json` — point it at your framework
+checkout.
 
 ## Still stuck?
 

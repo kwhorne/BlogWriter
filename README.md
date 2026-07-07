@@ -47,10 +47,10 @@ and troubleshooting.
 
 - [Rust](https://rustup.rs) (stable, edition 2021)
 - [Node.js](https://nodejs.org) 20+
-- The [Elyra framework](https://github.com/elyra) checked out locally
-  (the `elyra` crate and `@elyra/runtime` package are currently referenced by
-  path — see `Cargo.toml` and `app/package.json` and adjust the paths for your
-  machine)
+- Access to the [Elyra framework](https://github.com/kwhorne/elyra-framework)
+  repository (the `elyra` crate is a git dependency fetched over SSH; the
+  frontend's `@elyra/runtime` is still a local `file:` path in
+  `app/package.json` — adjust it to your checkout)
 - An **Anthropic API key** (required) and an **OpenAI API key** (optional, for
   header images)
 
@@ -129,6 +129,15 @@ required to see them succeed end to end.
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
 how to file issues and submit pull requests.
+
+## Building releases
+
+```bash
+scripts/build-macos.sh   # bundle + Developer ID-signed .app, .dmg, .zip (arm64)
+scripts/build-linux.sh   # Docker build → tar.gz (host arch)
+```
+
+Artifacts land in `dist/`. See the scripts for signing/notarization details.
 
 ## License
 

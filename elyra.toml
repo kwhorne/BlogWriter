@@ -8,9 +8,9 @@ dir = "app"
 out = "app/src/bindings.ts"
 
 [bundle]
-identifier = "com.example.blogwriter"
+identifier = "no.gets.blogwriter"
 name = "BlogWriter"
-version = "0.1.0"
+version = "1.0.0"
 
 [database]
 url = "sqlite://blogwriter.db?mode=rwc"

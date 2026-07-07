@@ -3,7 +3,7 @@
 
 [package]
 name = "blogwriter"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 
 [[bin]]
@@ -11,7 +11,7 @@ name = "blogwriter"
 path = "src/main.rs"
 
 [dependencies]
-elyra = { path = "/Users/kh/Code/elyra-framework/framework", features = ["database", "tray"] }
+elyra = { git = "ssh://git@github.com/kwhorne/elyra-framework.git", features = ["database", "tray"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 specta = { version = "=2.0.0-rc.25", features = ["derive"] }

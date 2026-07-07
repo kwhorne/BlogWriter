@@ -249,7 +249,7 @@ dependencies = [
 
 [[package]]
 name = "blogwriter"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "base64",
  "elyra",
@@ -751,6 +751,7 @@ dependencies = [
 [[package]]
 name = "elyra"
 version = "0.0.0"
+source = "git+ssh://git@github.com/kwhorne/elyra-framework.git#e5fa1211f04dc1b89607e786d2adbf48ddc2586e"
 dependencies = [
  "elyra-db",
  "elyra-macros",
@@ -771,6 +772,7 @@ dependencies = [
 [[package]]
 name = "elyra-db"
 version = "0.0.0"
+source = "git+ssh://git@github.com/kwhorne/elyra-framework.git#e5fa1211f04dc1b89607e786d2adbf48ddc2586e"
 dependencies = [
  "sqlx",
  "thiserror 2.0.18",
@@ -779,6 +781,7 @@ dependencies = [
 [[package]]
 name = "elyra-macros"
 version = "0.0.0"
+source = "git+ssh://git@github.com/kwhorne/elyra-framework.git#e5fa1211f04dc1b89607e786d2adbf48ddc2586e"
 dependencies = [
  "proc-macro2",
  "quote",

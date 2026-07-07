@@ -1,0 +1,4 @@
+# The elyra dependency is fetched over SSH (private repo) — use the system git
+# so SSH agent credentials work.
+[net]
+git-fetch-with-cli = true
